@@ -1,17 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: zamgar <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/07 12:44:13 by zamgar            #+#    #+#             */
-/*   Updated: 2024/06/07 18:26:45 by zamgar           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
-#include <fcntl.h>
+//#include <fcntl.h>
+
+int	ft_strlen(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
+}
 
 char	*get_next_line(int fd)
 {
@@ -22,50 +20,55 @@ char	*get_next_line(int fd)
 	int	count;
 	int	z;
 
-// while (buffer[BUFFER_SIZE] a encore de la place qui entoure tout
-	count = 0;
-	if (buffer[i - 1] == '\n')
-	{
-		buffer[i - 1] = '\0';
-		i--;
-	}
-	z = i;
-	while (buffer[i - 1] != '\n')
-	{
-		nbRead = read(fd, &buffer[i], 1);
-		if (nbRead == -1 ||  nbRead < 0)
-			return (NULL);
-		if (nbRead == 0)
-			return (NULL);
-		count++;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	while (buffer[i] != '\0')
 		i++;
+	z = i;
+	count = 0;
+	nbRead = read(fd, &buffer[i], 1);
+	if (nbRead <= 0)
+		return (NULL);
+	while (nbRead > 0)
+	{
+		if (buffer[i] == '\n')
+		{
+			i++;
+			count++;
+			break ;
+		}
+		i++;
+		count++;
+		nbRead = read(fd, &buffer[i], 1);
 	}
-	printf("Full buffer : %s", buffer);
-	newLine = (char *)malloc(sizeof(char) * count);
+	newLine = (char *)malloc(sizeof(char) * count + 1);
+	if (newLine == NULL)
+		return (NULL);
 	count = 0;
 	while (buffer[z] != '\0')
 	{
 		newLine[count] = buffer[z];
-		count++;
 		z++;
+		count++;
 	}
 	newLine[count] = '\0';
 	return (newLine);
 }
 
-int	main(void)
+/*int	main()
 {
-	int	fd = open("test.c", O_RDONLY);
-	int	i;
-	int	lineNb;
+	int fd = open("test", O_RDONLY);
+	int line;
+	int i;
 
-	lineNb = 1;
+	line = 1;
+	i = 0;
+	//printf("Line 1 : %s\n", get_next_line(fd));
 	while (i < 6)
 	{
-		printf("Line %d : %s\n\n", lineNb, get_next_line(fd));
+		printf("Line %d : %s\n", line, get_next_line(fd));
 		i++;
-		lineNb++;
+		line++;
 	}
-	close(fd);
 	return (0);
-}
+}*/
