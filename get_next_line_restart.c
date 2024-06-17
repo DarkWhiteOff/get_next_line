@@ -11,50 +11,39 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-//#include <fcntl.h>
+#include <fcntl.h>
+
+char	*read_into_buffer()
+{
+	char	*newLine;
+	int	nbRead;
+
+	nbRead = 0;
+	while (nbRead > 0)
+	{
+		nbRead = read(fd, buffer, BUFFER_SIZE);
+		if ()
+	}
+	newLine = (char *)malloc(sizeof(char) * );
+	if (newLine == NULL)
+		return (NULL);
+	while (buffer[] != '\0')
+	{
+		newLine[] = buffer[];
+		
+	}
+	newLine[] = '\0';
+	return (newLine);
+}
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE];
+	char	*buffer;
 	char	*newLine;
-	int	nbRead;
-	static int	i;
-	int	count;
-	int	z;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	while (buffer[i] != '\0')
-		i++;
-	z = i;
-	count = 0;
-	nbRead = read(fd, &buffer[i], 1);
-	if (nbRead <= 0)
-		return (NULL);
-	while (nbRead > 0)
-	{
-		if (buffer[i] == '\n')
-		{
-			i++;
-			count++;
-			break ;
-		}
-		i++;
-		count++;
-		nbRead = read(fd, &buffer[i], 1);
-	}
-	newLine = (char *)malloc(sizeof(char) * count + 1);
-	if (newLine == NULL)
-		return (NULL);
-	count = 0;
-	while (buffer[z] != '\0')
-	{
-		newLine[count] = buffer[z];
-		z++;
-		count++;
-	}
-	newLine[count] = '\0';
-	return (newLine);
+	newLine = read_into_buffer(fd, buffer, BUFFER_SIZE);
 }
 
 /*int	main()
