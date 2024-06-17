@@ -13,37 +13,46 @@
 #include "get_next_line.h"
 #include <fcntl.h>
 
-char	*read_into_buffer()
+char	*read_into_buffer(int fd, char *save, char *buffer)
 {
-	char	*newLine;
 	int	nbRead;
+	char	*newLine;
+	char	*temp;
 
-	nbRead = 0;
+	nbRead = 1;
 	while (nbRead > 0)
 	{
 		nbRead = read(fd, buffer, BUFFER_SIZE);
-		if ()
+		if (nbRead < 0)
+			return (NULL);
+		buffer[nbRead] = '\0';
+		if (save == NULL)
+			save = ft_strdup("");
+		temp = save;
+		/*if (ft_strchr('\n'))
+			save = substr('\n');
+		newLine = ft_strjoin(temp, buffer);*/
+		save = ft_strjoin(temp, buffer);
+		if (ft_strchr('\n'))
+			break ;
+		return (newLine);
 	}
-	newLine = (char *)malloc(sizeof(char) * );
-	if (newLine == NULL)
-		return (NULL);
-	while (buffer[] != '\0')
-	{
-		newLine[] = buffer[];
-		
-	}
-	newLine[] = '\0';
-	return (newLine);
 }
 
 char	*get_next_line(int fd)
 {
 	char	*buffer;
 	char	*newLine;
+	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	newLine = read_into_buffer(fd, buffer, BUFFER_SIZE);
+	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (buffer == NULL)
+		return (NULL);
+	newLine = read_into_buffer(fd, save, buffer); // dont forget to free
+	free(buffer);
+	reuturn (newLine);
 }
 
 /*int	main()
