@@ -10,13 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_restart.h"
 #include <fcntl.h>
 
 char	*read_into_buffer(int fd, char *save, char *buffer)
 {
 	int	nbRead;
-	char	*newLine;
 	char	*temp;
 
 	nbRead = 1;
@@ -33,10 +32,10 @@ char	*read_into_buffer(int fd, char *save, char *buffer)
 			save = substr('\n');
 		newLine = ft_strjoin(temp, buffer);*/
 		save = ft_strjoin(temp, buffer);
-		if (ft_strchr('\n'))
+		if (ft_strchr(buffer, '\n'))
 			break ;
-		return (newLine);
 	}
+	return (save);
 }
 
 char	*get_next_line(int fd)
@@ -50,12 +49,12 @@ char	*get_next_line(int fd)
 	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (buffer == NULL)
 		return (NULL);
-	newLine = read_into_buffer(fd, save, buffer); // dont forget to free
+	newLine = read_into_buffer(fd, save, buffer);
 	free(buffer);
-	reuturn (newLine);
+	return (newLine);
 }
 
-/*int	main()
+int	main()
 {
 	int fd = open("test", O_RDONLY);
 	int line;
@@ -63,12 +62,12 @@ char	*get_next_line(int fd)
 
 	line = 1;
 	i = 0;
-	//printf("Line 1 : %s\n", get_next_line(fd));
-	while (i < 6)
+	printf("Line 1 : %s\n", get_next_line(fd));
+	/*while (i < 6)
 	{
 		printf("Line %d : %s\n", line, get_next_line(fd));
 		i++;
 		line++;
-	}
+	}*/
 	return (0);
-}*/
+}

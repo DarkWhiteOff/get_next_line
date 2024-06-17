@@ -22,5 +22,11 @@
 #endif
 
 char	*get_next_line(int fd);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strcat(char *dest, char *src);
+char	*ft_strchr(const char *s, int c);
+int	ftft_strlen(const char *s, unsigned char c);
+char	*ft_strdup(const char *s);
+size_t	ft_strlen(const char *s);
 
 #endif
