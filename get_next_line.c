@@ -11,49 +11,85 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-//#include <fcntl.h>
+#include <fcntl.h>
+
+char	*read_into_buffer(int fd, char *save, char *buffer)
+{
+	int	nbRead;
+	char	*temp;
+
+	nbRead = 1;
+	while (nbRead > 0)
+	{
+		nbRead = read(fd, buffer, BUFFER_SIZE);
+		if (nbRead < 0)
+		{
+			free(save);
+			return (NULL);
+		}
+		if (nbRead == 0)
+			break ;
+		buffer[nbRead] = '\0';
+		if (save == NULL)
+			save = ft_strdup("");
+		temp = save;
+		save = ft_strjoin(temp, buffer);
+		free(temp);
+		if (ft_strchr(buffer, '\n'))
+			break ;
+	}
+	return (save);
+}
+
+char	*prepare_nextline(char	*newLine)
+{
+	char	*save;
+	int	i;
+
+	i = 0;
+	while(newLine[i] != '\n' && newLine[i] != '\0')
+		i++;
+	if (newLine[i] == 0 || newLine[i + 1] == 0)
+		return (NULL);
+	save = ft_substr(newLine, i + 1, ft_strlen(newLine) - i);
+	if (save == NULL)
+	{
+		free(save);
+		return (NULL);
+	}
+	return (save);
+}
+
+char	*prepare_newline(char	*newLine)
+{
+	int	i;
+
+	i = 0;
+	while(newLine[i] != '\n' && newLine[i] != '\0')
+		i++;
+	if (newLine[i] == 0 || newLine[i + 1] == 0)
+		return (newLine);
+	newLine[i + 1] = '\0';
+	return (newLine);
+}
 
 char	*get_next_line(int fd)
 {
-	static char	buffer[BUFFER_SIZE];
+	char	*buffer;
 	char	*newLine;
-	int	nbRead;
-	static int	i;
-	int	count;
-	int	z;
+	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	while (buffer[i] != '\0')
-		i++;
-	z = i;
-	count = 0;
-	nbRead = read(fd, &buffer[i], 1);
-	if (nbRead <= 0)
+	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (buffer == NULL)
 		return (NULL);
-	while (nbRead > 0)
-	{
-		if (buffer[i] == '\n')
-		{
-			i++;
-			count++;
-			break ;
-		}
-		i++;
-		count++;
-		nbRead = read(fd, &buffer[i], 1);
-	}
-	newLine = (char *)malloc(sizeof(char) * count + 1);
+	newLine = read_into_buffer(fd, save, buffer);
+	free(buffer);
 	if (newLine == NULL)
 		return (NULL);
-	count = 0;
-	while (buffer[z] != '\0')
-	{
-		newLine[count] = buffer[z];
-		z++;
-		count++;
-	}
-	newLine[count] = '\0';
+	save = prepare_nextline(newLine);
+	newLine = prepare_newline(newLine);
 	return (newLine);
 }
 
@@ -61,11 +97,10 @@ char	*get_next_line(int fd)
 {
 	int fd = open("test", O_RDONLY);
 	int line;
-	int i;
+	int	i;
 
 	line = 1;
 	i = 0;
-	//printf("Line 1 : %s\n", get_next_line(fd));
 	while (i < 6)
 	{
 		printf("Line %d : %s\n", line, get_next_line(fd));
