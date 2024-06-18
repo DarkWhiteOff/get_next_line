@@ -15,21 +15,21 @@
 
 char	*read_into_buffer(int fd, char *save, char *buffer)
 {
-	int	nbRead;
+	int		nb_read;
 	char	*temp;
 
-	nbRead = 1;
-	while (nbRead > 0)
+	nb_read = 1;
+	while (nb_read > 0)
 	{
-		nbRead = read(fd, buffer, BUFFER_SIZE);
-		if (nbRead < 0)
-		{
-			free(save);
+		nb_read = read(fd, buffer, BUFFER_SIZE);
+		if (nb_read == -1)
+		//{
+			//free(save);
 			return (NULL);
-		}
-		if (nbRead == 0)
+		//}
+		if (nb_read == 0)
 			break ;
-		buffer[nbRead] = '\0';
+		buffer[nb_read] = '\0';
 		if (save == NULL)
 			save = ft_strdup("");
 		temp = save;
@@ -44,19 +44,16 @@ char	*read_into_buffer(int fd, char *save, char *buffer)
 char	*prepare_nextline(char	*newLine)
 {
 	char	*save;
-	int	i;
+	int		i;
 
 	i = 0;
-	while(newLine[i] != '\n' && newLine[i] != '\0')
+	while (newLine[i] != '\n' && newLine[i] != '\0')
 		i++;
 	if (newLine[i] == 0 || newLine[i + 1] == 0)
 		return (NULL);
 	save = ft_substr(newLine, i + 1, ft_strlen(newLine) - i);
 	if (save == NULL)
-	{
-		free(save);
 		return (NULL);
-	}
 	return (save);
 }
 
@@ -65,7 +62,7 @@ char	*prepare_newline(char	*newLine)
 	int	i;
 
 	i = 0;
-	while(newLine[i] != '\n' && newLine[i] != '\0')
+	while (newLine[i] != '\n' && newLine[i] != '\0')
 		i++;
 	if (newLine[i] == 0 || newLine[i + 1] == 0)
 		return (newLine);
@@ -75,8 +72,8 @@ char	*prepare_newline(char	*newLine)
 
 char	*get_next_line(int fd)
 {
-	char	*buffer;
-	char	*newLine;
+	char		*buffer;
+	char		*new_line;
 	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -84,19 +81,19 @@ char	*get_next_line(int fd)
 	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (buffer == NULL)
 		return (NULL);
-	newLine = read_into_buffer(fd, save, buffer);
+	new_line = read_into_buffer(fd, save, buffer);
 	free(buffer);
-	if (newLine == NULL)
+	if (new_line == NULL)
 		return (NULL);
-	save = prepare_nextline(newLine);
-	newLine = prepare_newline(newLine);
-	return (newLine);
+	save = prepare_nextline(new_line);
+	new_line = prepare_newline(new_line);
+	return (new_line);
 }
 
-/*int	main()
+/*int	main(void)
 {
-	int fd = open("test", O_RDONLY);
-	int line;
+	int	fd = open("read_error.txt", O_RDONLY);
+	int	line;
 	int	i;
 
 	line = 1;
