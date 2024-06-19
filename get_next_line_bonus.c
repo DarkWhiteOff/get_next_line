@@ -66,36 +66,41 @@ char	*get_next_line(int fd)
 {
 	char		*buffer;
 	char		*new_line;
-	static char	*save;
+	static char	*save[1024];
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 	{
-		free(save);
-		save = NULL;
+		free(save[fd]);
+		save[fd] = NULL;
 		return (NULL);
 	}
 	buffer = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (buffer == NULL)
 		return (NULL);
-	new_line = read_into_buffer(fd, save, buffer);
+	new_line = read_into_buffer(fd, save[fd], buffer);
 	free(buffer);
 	if (new_line == NULL)
 	{
-		free(save);
-		save = NULL;
+		free(save[fd]);
+		save[fd] = NULL;
 		return (NULL);
 	}
-	save = prepare_nextline(new_line);
+	save[fd] = prepare_nextline(new_line);
 	return (new_line);
 }
 
 /*int	main(void)
 {
-	int	fd = open("1char.txt", O_RDONLY);
+	int	fd1 = open("1char.txt", O_RDONLY);
+	int	fd2 = open ("read_error.txt", O_RDONLY);
 	int	line;
 	int	i;
 
 	line = 1;
+	printf("Line 1 fd1 : %s\n", get_next_line(fd1));
+	printf("Line 1 fd2 : %s\n", get_next_line(fd2));
+	printf("Line 2 fd1 : %s\n", get_next_line(fd1));
+	printf("Line 2 fd2 : %s\n", get_next_line(fd2));
 	i = 0;
 	while (i < 4)
 	{
