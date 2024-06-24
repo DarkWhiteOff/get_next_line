@@ -6,7 +6,7 @@
 /*   By: zamgar <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 12:47:04 by zamgar            #+#    #+#             */
-/*   Updated: 2024/06/12 12:47:06 by zamgar           ###   ########.fr       */
+/*   Updated: 2024/06/24 13:24:00 by zamgar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*read_into_buffer(int fd, char *save, char *buffer)
 	while (nb_read > 0)
 	{
 		nb_read = read(fd, buffer, BUFFER_SIZE);
-		if (nb_read == -1)
+		if (nb_read < 0)
 		{
 			free(save);
 			return (NULL);
@@ -33,9 +33,9 @@ char	*read_into_buffer(int fd, char *save, char *buffer)
 		if (save == NULL)
 			save = ft_strdup("");
 		temp = save;
-		save = ft_strjoin(temp, buffer);
+		if (temp != NULL && buffer != NULL)
+			save = ft_strjoin(temp, buffer);
 		free(temp);
-		temp = NULL;
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}

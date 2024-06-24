@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zamgar <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/12 12:47:04 by zamgar            #+#    #+#             */
-/*   Updated: 2024/06/12 12:47:06 by zamgar           ###   ########.fr       */
+/*   Created: 2024/06/24 13:30:23 by zamgar            #+#    #+#             */
+/*   Updated: 2024/06/24 13:30:24 by zamgar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <fcntl.h>
+#include "get_next_line_bonus.h"
+//#include <fcntl.h>
 
 char	*read_into_buffer(int fd, char *save, char *buffer)
 {
@@ -35,7 +35,6 @@ char	*read_into_buffer(int fd, char *save, char *buffer)
 		temp = save;
 		save = ft_strjoin(temp, buffer);
 		free(temp);
-		temp = NULL;
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}

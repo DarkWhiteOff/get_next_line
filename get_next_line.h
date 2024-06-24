@@ -6,7 +6,7 @@
 /*   By: zamgar <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 12:47:09 by zamgar            #+#    #+#             */
-/*   Updated: 2024/06/12 12:47:11 by zamgar           ###   ########.fr       */
+/*   Updated: 2024/06/24 13:29:28 by zamgar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 # include <stdio.h>
 # include <unistd.h>
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 10
-#endif
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 char				*get_next_line(int fd);
 char				*ft_strjoin(char const *s1, char const *s2);
